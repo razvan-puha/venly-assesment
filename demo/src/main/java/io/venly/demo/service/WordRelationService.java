@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,5 +80,19 @@ public class WordRelationService {
         }
 
         return resultList;
+    }
+
+    /*
+        Since I didn't have any more time during the assessment, I will try to present the solution:
+            We have several options in which we can solve this problem:
+            - we use a recursive algorithm in which we'll try to find the first path which goes from source to target
+            - we use all the relations from the DB to build an oriented graph and find the shortest path from source to target
+
+        I will try to implement a solution after the assessment.
+     */
+    @Transactional
+    public String getPath(String source, String target) {
+        String resultPath = "";
+        return resultPath;
     }
 }

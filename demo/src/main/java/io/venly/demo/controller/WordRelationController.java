@@ -36,4 +36,12 @@ public class WordRelationController {
             return wordRelationService.getWordRelationsByRelation(RelationType.from(relation), showAlsoInverse);
         }
     }
+
+    @GetMapping(value = "/search", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String pathSearch(
+        @RequestPart("source") String source,
+        @RequestPart("target") String target
+    ) {
+        return wordRelationService.getPath(source.toLowerCase().trim(), target.toLowerCase().trim());
+    }
 }
