@@ -12,8 +12,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class WordRelationDto {
 
-    int id;
     String wordOne;
     String wordTwo;
     RelationType relation;
+    boolean inverse;
 }

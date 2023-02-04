@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,16 +34,31 @@ public class WordRelationService {
             .map(wordRelation -> WordRelationDto.of(wordRelation.getId(),
                 wordRelation.getWordOne(),
                 wordRelation.getWordTwo(),
-                wordRelation.getRelation()))
+                wordRelation.getRelation(),
+                false))
             .toList();
     }
 
-    public List<WordRelationDto> getWordRelationsByRelation(RelationType relation) {
-        return wordRelationRepository.findByRelation(relation).stream()
+    public List<WordRelationDto> getWordRelationsByRelation(RelationType relation, boolean showAlsoInverse) {
+        List<WordRelationDto> resultList = new ArrayList<>(wordRelationRepository.findByRelation(relation).stream()
             .map(wordRelation -> WordRelationDto.of(wordRelation.getId(),
                 wordRelation.getWordOne(),
                 wordRelation.getWordTwo(),
-                wordRelation.getRelation()))
-            .toList();
+                wordRelation.getRelation(),
+                false))
+            .toList());
+
+        if (showAlsoInverse) {
+            List<WordRelationDto> inversedWordRelations = resultList.stream()
+                .map(wordRelationDto -> WordRelationDto.of(wordRelationDto.getId(),
+                    wordRelationDto.getWordTwo(),
+                    wordRelationDto.getWordOne(),
+                    wordRelationDto.getRelation(),
+                    true)).toList();
+
+            resultList.addAll(inversedWordRelations);
+        }
+
+        return resultList;
     }
 }

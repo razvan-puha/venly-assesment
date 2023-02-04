@@ -28,11 +28,14 @@ public class WordRelationController {
     }
 
     @GetMapping
-    public List<WordRelationDto> getWordRelations(@RequestParam(value = "relation", required = false) String relation) {
+    public List<WordRelationDto> getWordRelations(
+        @RequestParam(value = "relation", required = false) String relation,
+        @RequestParam(value = "inverse", required = false) boolean showAlsoInverse
+    ) {
         if (relation.isEmpty()) {
             return wordRelationService.getWordRelations();
         } else {
-            return wordRelationService.getWordRelationsByRelation(RelationType.from(relation));
+            return wordRelationService.getWordRelationsByRelation(RelationType.from(relation), showAlsoInverse);
         }
     }
 }
