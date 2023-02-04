@@ -2,6 +2,7 @@ package io.venly.demo.controller;
 
 import io.venly.demo.dto.WordRelationDto;
 import io.venly.demo.dto.WordRelationRequestBody;
+import io.venly.demo.entity.RelationType;
 import io.venly.demo.service.WordRelationService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,11 @@ public class WordRelationController {
     }
 
     @GetMapping
-    public List<WordRelationDto> getWordRelations() {
-        return wordRelationService.getWordRelations();
+    public List<WordRelationDto> getWordRelations(@RequestParam(value = "relation", required = false) String relation) {
+        if (relation.isEmpty()) {
+            return wordRelationService.getWordRelations();
+        } else {
+            return wordRelationService.getWordRelationsByRelation(RelationType.from(relation));
+        }
     }
 }
