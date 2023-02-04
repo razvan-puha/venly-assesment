@@ -26,18 +26,26 @@ public class WordRelationService {
             wordRelationRepository.findByWordOneAndWordTwo(wordRelationDto.getWordOne().toLowerCase().trim(),
                 wordRelationDto.getWordTwo().toLowerCase().trim());
 
+        Optional<WordRelation> inverseRelationOptional =
+            wordRelationRepository.findByWordOneAndWordTwo(wordRelationDto.getWordTwo().toLowerCase().trim(),
+                wordRelationDto.getWordOne().toLowerCase().trim());
+
         if (existingRelationOptional.isPresent()) {
             throw new RelationAlreadyPresentException(wordRelationDto.getWordOne().toLowerCase().trim(),
                 wordRelationDto.getWordTwo().toLowerCase().trim());
-        } else {
-            WordRelation wordRelation = new WordRelation();
-            wordRelation.setWordOne(wordRelationDto.getWordOne().toLowerCase().trim());
-            wordRelation.setWordTwo(wordRelationDto.getWordTwo().toLowerCase().trim());
-            wordRelation.setRelation(RelationType.from(wordRelationDto.getRelation()));
-
-            WordRelation createdEntity = wordRelationRepository.save(wordRelation);
-            return createdEntity.getId();
         }
+        if (inverseRelationOptional.isPresent()) {
+            throw new RelationAlreadyPresentException(wordRelationDto.getWordTwo().toLowerCase().trim(),
+                wordRelationDto.getWordOne().toLowerCase().trim());
+        }
+
+        WordRelation wordRelation = new WordRelation();
+        wordRelation.setWordOne(wordRelationDto.getWordOne().toLowerCase().trim());
+        wordRelation.setWordTwo(wordRelationDto.getWordTwo().toLowerCase().trim());
+        wordRelation.setRelation(RelationType.from(wordRelationDto.getRelation()));
+
+        WordRelation createdEntity = wordRelationRepository.save(wordRelation);
+        return createdEntity.getId();
     }
 
     public List<WordRelationDto> getWordRelations() {
