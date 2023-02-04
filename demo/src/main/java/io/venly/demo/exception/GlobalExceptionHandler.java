@@ -22,6 +22,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest();
     }
 
+    @ExceptionHandler(RelationAlreadyPresentException.class)
+    public Object handleRelationAlreadyPresentException(RelationAlreadyPresentException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         Map<String, List<String>> body = new HashMap<>();

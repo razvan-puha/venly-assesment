@@ -13,14 +13,14 @@ import lombok.experimental.FieldDefaults;
 public class WordRelationRequestBody {
 
     @NotBlank(message = "First word is required")
-    @Pattern(regexp = "[\\sA-Za-z]+", message = "Only characters from A-Z, a-z and spaces are allowed")
+    @Pattern(regexp = "[\\sA-Za-z]+", message = "Word one: Only characters from A-Z, a-z and spaces are allowed")
     String wordOne;
 
     @NotBlank(message = "Second word is required")
-    @Pattern(regexp = "[\\sA-Za-z]+", message = "Only characters from A-Z, a-z and spaces are allowed")
+    @Pattern(regexp = "[\\sA-Za-z]+", message = "Word two: Only characters from A-Z, a-z and spaces are allowed")
     String wordTwo;
 
     @NotBlank(message = "A relation is required")
-    @Pattern(regexp = "[\\sA-Za-z]+", message = "Only characters from A-Z, a-z and spaces are allowed")
-    RelationType relation;
+    @Pattern(regexp = "[\\sA-Za-z]+", message = "Relation: Only characters from A-Z, a-z and spaces are allowed")
+    String relation;
 }

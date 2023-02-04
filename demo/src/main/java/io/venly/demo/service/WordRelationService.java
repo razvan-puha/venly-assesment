@@ -4,6 +4,7 @@ import io.venly.demo.dto.WordRelationDto;
 import io.venly.demo.dto.WordRelationRequestBody;
 import io.venly.demo.entity.RelationType;
 import io.venly.demo.entity.WordRelation;
+import io.venly.demo.exception.RelationAlreadyPresentException;
 import io.venly.demo.repository.WordRelationRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -20,13 +22,22 @@ public class WordRelationService {
     WordRelationRepository wordRelationRepository;
 
     public int addWordRelation(WordRelationRequestBody wordRelationDto) {
-        WordRelation wordRelation = new WordRelation();
-        wordRelation.setWordOne(wordRelationDto.getWordOne().toLowerCase().trim());
-        wordRelation.setWordTwo(wordRelationDto.getWordTwo().toLowerCase().trim());
-        wordRelation.setRelation(wordRelationDto.getRelation());
+        Optional<WordRelation> existingRelationOptional =
+            wordRelationRepository.findByWordOneAndWordTwo(wordRelationDto.getWordOne().toLowerCase().trim(),
+                wordRelationDto.getWordTwo().toLowerCase().trim());
 
-        WordRelation createdEntity = wordRelationRepository.save(wordRelation);
-        return createdEntity.getId();
+        if (existingRelationOptional.isPresent()) {
+            throw new RelationAlreadyPresentException(wordRelationDto.getWordOne().toLowerCase().trim(),
+                wordRelationDto.getWordTwo().toLowerCase().trim());
+        } else {
+            WordRelation wordRelation = new WordRelation();
+            wordRelation.setWordOne(wordRelationDto.getWordOne().toLowerCase().trim());
+            wordRelation.setWordTwo(wordRelationDto.getWordTwo().toLowerCase().trim());
+            wordRelation.setRelation(RelationType.from(wordRelationDto.getRelation()));
+
+            WordRelation createdEntity = wordRelationRepository.save(wordRelation);
+            return createdEntity.getId();
+        }
     }
 
     public List<WordRelationDto> getWordRelations() {
