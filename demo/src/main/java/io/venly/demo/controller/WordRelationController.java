@@ -37,10 +37,10 @@ public class WordRelationController {
         }
     }
 
-    @GetMapping(value = "/search", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public String pathSearch(
-        @RequestPart("source") String source,
-        @RequestPart("target") String target
+    @GetMapping(value = "/search",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public List<String> pathSearch(
+        @RequestPart(value = "source", required = false) String source,
+        @RequestPart(value = "target", required = false) String target
     ) {
         return wordRelationService.getPath(source.toLowerCase().trim(), target.toLowerCase().trim());
     }

@@ -4,13 +4,18 @@ import io.venly.demo.dto.WordRelationDto;
 import io.venly.demo.dto.WordRelationRequestBody;
 import io.venly.demo.entity.RelationType;
 import io.venly.demo.entity.WordRelation;
+import io.venly.demo.exception.NoPathAvailableException;
 import io.venly.demo.exception.RelationAlreadyPresentException;
+import io.venly.demo.graph.StringWeightedEdge;
 import io.venly.demo.repository.WordRelationRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,9 +95,32 @@ public class WordRelationService {
 
         I will try to implement a solution after the assessment.
      */
-    @Transactional
-    public String getPath(String source, String target) {
-        String resultPath = "";
-        return resultPath;
+    public List<String> getPath(String source, String target) {
+        List<WordRelation> wordRelations = wordRelationRepository.findAll();
+        Graph<String, StringWeightedEdge> relationsGraph = GraphTypeBuilder.<String, StringWeightedEdge>directed()
+            .allowingMultipleEdges(true)
+            .weighted(false)
+            .allowingSelfLoops(false)
+            .edgeClass(StringWeightedEdge.class)
+            .buildGraph();
+
+        // Add vertexes
+        wordRelations.stream().map(WordRelation::getWordOne).forEach(relationsGraph::addVertex);
+        wordRelations.stream().map(WordRelation::getWordTwo).forEach(relationsGraph::addVertex);
+        // Add edges
+        wordRelations.forEach(item -> {
+            relationsGraph.addEdge(item.getWordOne(), item.getWordTwo(), new StringWeightedEdge(item.getRelation().getValue()));
+            relationsGraph.addEdge(item.getWordTwo(), item.getWordOne(), new StringWeightedEdge(item.getRelation().getValue()));
+        });
+
+        DijkstraShortestPath<String, StringWeightedEdge> dijkstraAlg = new DijkstraShortestPath<>(relationsGraph);
+        GraphPath<String, StringWeightedEdge> path = dijkstraAlg.getPath(source, target);
+
+        if (path == null) {
+            throw new NoPathAvailableException(source, target);
+        }
+
+        return new ArrayList<>(path.getEdgeList().stream().map(StringWeightedEdge::toString).toList());
+
     }
 }
