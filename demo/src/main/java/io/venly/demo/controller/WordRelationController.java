@@ -4,12 +4,11 @@ import io.venly.demo.dto.WordRelationDto;
 import io.venly.demo.dto.WordRelationRequestBody;
 import io.venly.demo.entity.RelationType;
 import io.venly.demo.service.WordRelationService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class WordRelationController {
     WordRelationService wordRelationService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void addWordRelation(@RequestBody WordRelationRequestBody requestBody) {
+    public void addWordRelation(@RequestBody @Valid WordRelationRequestBody requestBody) {
         wordRelationService.addWordRelation(requestBody);
     }
 
