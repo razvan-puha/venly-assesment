@@ -21,8 +21,8 @@ public class WordRelationService {
 
     public int addWordRelation(WordRelationRequestBody wordRelationDto) {
         WordRelation wordRelation = new WordRelation();
-        wordRelation.setWordOne(wordRelationDto.getWordOne());
-        wordRelation.setWordTwo(wordRelationDto.getWordTwo());
+        wordRelation.setWordOne(wordRelationDto.getWordOne().toLowerCase().trim());
+        wordRelation.setWordTwo(wordRelationDto.getWordTwo().toLowerCase().trim());
         wordRelation.setRelation(wordRelationDto.getRelation());
 
         WordRelation createdEntity = wordRelationRepository.save(wordRelation);

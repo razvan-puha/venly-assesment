@@ -22,9 +22,8 @@ public class WordRelationController {
     WordRelationService wordRelationService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity.BodyBuilder addWordRelation(@RequestBody WordRelationRequestBody requestBody) {
-        int createdEntityId = wordRelationService.addWordRelation(requestBody);
-        return ResponseEntity.status(HttpStatus.CREATED);
+    public void addWordRelation(@RequestBody WordRelationRequestBody requestBody) {
+        wordRelationService.addWordRelation(requestBody);
     }
 
     @GetMapping
@@ -32,7 +31,7 @@ public class WordRelationController {
         @RequestParam(value = "relation", required = false) String relation,
         @RequestParam(value = "inverse", required = false) boolean showAlsoInverse
     ) {
-        if (relation.isEmpty()) {
+        if (relation == null || relation.isEmpty()) {
             return wordRelationService.getWordRelations();
         } else {
             return wordRelationService.getWordRelationsByRelation(RelationType.from(relation), showAlsoInverse);
