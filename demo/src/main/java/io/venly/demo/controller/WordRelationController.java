@@ -3,6 +3,7 @@ package io.venly.demo.controller;
 import io.venly.demo.dto.WordRelationDto;
 import io.venly.demo.dto.WordRelationRequestBody;
 import io.venly.demo.entity.RelationType;
+import io.venly.demo.exception.ResourceCreatedException;
 import io.venly.demo.service.WordRelationService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -11,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -22,7 +24,8 @@ public class WordRelationController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void addWordRelation(@RequestBody @Valid WordRelationRequestBody requestBody) {
-        wordRelationService.addWordRelation(requestBody);
+        int newResourceId = wordRelationService.addWordRelation(requestBody);
+        throw new ResourceCreatedException(URI.create(String.format("/api/word_relations/%d", newResourceId)));
     }
 
     @GetMapping

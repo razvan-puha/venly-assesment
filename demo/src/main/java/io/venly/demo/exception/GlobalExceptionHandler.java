@@ -1,7 +1,6 @@
 package io.venly.demo.exception;
 
 import org.springframework.http.*;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,6 +29,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(NoPathAvailableException.class)
     public Object handleNoPathAvailableException(NoPathAvailableException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(ResourceCreatedException.class)
+    public Object handleResourceCreatedException(ResourceCreatedException exception) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(exception.getMessage());
     }
 
     @Override
