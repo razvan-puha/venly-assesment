@@ -2,17 +2,14 @@ package io.venly.demo.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterStyle;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.venly.demo.dto.WordRelationDto;
 import io.venly.demo.dto.WordRelationRequestBody;
 import io.venly.demo.entity.RelationType;
-import io.venly.demo.entity.WordRelation;
 import io.venly.demo.exception.ResourceCreatedException;
 import io.venly.demo.service.WordRelationService;
 import jakarta.validation.Valid;
