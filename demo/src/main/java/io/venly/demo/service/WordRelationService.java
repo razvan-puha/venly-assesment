@@ -31,7 +31,7 @@ public class WordRelationService {
 
     public List<WordRelationDto> getWordRelations() {
         return wordRelationRepository.findAll().stream()
-            .map(wordRelation -> WordRelationDto.of(wordRelation.getId(),
+            .map(wordRelation -> WordRelationDto.of(
                 wordRelation.getWordOne(),
                 wordRelation.getWordTwo(),
                 wordRelation.getRelation(),
@@ -41,7 +41,7 @@ public class WordRelationService {
 
     public List<WordRelationDto> getWordRelationsByRelation(RelationType relation, boolean showAlsoInverse) {
         List<WordRelationDto> resultList = new ArrayList<>(wordRelationRepository.findByRelation(relation).stream()
-            .map(wordRelation -> WordRelationDto.of(wordRelation.getId(),
+            .map(wordRelation -> WordRelationDto.of(
                 wordRelation.getWordOne(),
                 wordRelation.getWordTwo(),
                 wordRelation.getRelation(),
@@ -50,7 +50,7 @@ public class WordRelationService {
 
         if (showAlsoInverse) {
             List<WordRelationDto> inversedWordRelations = resultList.stream()
-                .map(wordRelationDto -> WordRelationDto.of(wordRelationDto.getId(),
+                .map(wordRelationDto -> WordRelationDto.of(
                     wordRelationDto.getWordTwo(),
                     wordRelationDto.getWordOne(),
                     wordRelationDto.getRelation(),
