@@ -7,9 +7,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@AllArgsConstructor(staticName = "of")
-@NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class WordRelationRequestBody {
 
     @NotBlank(message = "First word is required")
